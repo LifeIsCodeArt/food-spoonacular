@@ -1,23 +1,84 @@
 <script setup>
 
-import {useHomeStore} from "@/stores/homeStore.js";
+import {useTemplatesStore, useRecipesStore} from "@/stores/homeStore.js";
 
 import AboutItem from "@/components/Homepage/aboutItem.vue";
 import Category from "@/components/Homepage/category.vue"
 
-import {computed} from "vue";
+import {computed, onMounted, onBeforeMount, ref, watch} from "vue";
 
-const store = useHomeStore()
+const templates = useTemplatesStore()
 
-const templates = computed(()=> store.templateItems)
+const templatesArray = computed(()=> templates.templateItems)
+
+const recipes = computed(() => useRecipesStore.getCurrentRecipes)
+
+
+
+const content2 = ref()
+
+/* window.onscroll = (el) =>  {
+
+    let posTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+
+    console.log(content.value.getBoundingClientRect().top  ,' y=' + posTop);
+
+    if(content.value.getBoundingClientRect().top <= 250){
+
+        content.value.classList.add('element-show')
+        console.log('class added')
+
+    }
+
+    else {
+
+        console.log('class not added')
+
+    }
+
+}*/
+
+const content = ref()
+
+const contentCheck = content.value.getBoundingClientRect().top <= 450
+
+ window.onscroll = () =>  {
+
+    const topValue = content.value.getBoundingClientRect().top
+
+    if(topValue.value <= 450){
+
+        topValue.value.classList.add('element-show')
+        console.log('class added')
+
+    }
+
+    else {
+
+        console.log('class not added')
+
+    }
+
+}
+
+
+onMounted(()=> {
+
+    useRecipesStore().getCurrentRecipes()
+    console.log(recipes)
+
+})
+
 
 </script>
 
-<template>
+<template >
+
+    <div class="">
 
     <section class="pt-[40px] pl-[133px] bg-[#FFFBF3] h-[600px] flex">
 
-        <div class=" w-[50%] pt-[43px] flex flex-col">
+        <div class=" w-[50%] pt-[43px] flex flex-col ">
 
             <Category :name="'Fast Delivery'"/>
 
@@ -95,13 +156,13 @@ const templates = computed(()=> store.templateItems)
 
         <div class="mt-[45px] flex justify-around px-[150px]">
 
-            <about-item v-for="item in templates" :item="item" />
+            <about-item v-for="item in templatesArray" :item="item" />
 
         </div>
 
     </section>
 
-    <section class="mt-[115px] bg-[#FFFBF3] h-[712px]">
+    <section class="mt-[115px] bg-[#FFFBF3] h-[712px] ">
 
         <div class="bg-delivery bg-no-repeat h-full ml-[140px] mr-[180px] flex items-center justify-end">
 
@@ -135,19 +196,19 @@ const templates = computed(()=> store.templateItems)
 
     </section>
 
-    <section class="px-[135px] py-[70px]">
+    <section class="px-[135px] py-[70px] ">
 
-        <div class="flex items-center justify-center">
+        <div class="flex  justify-center  h-[412px]">
 
-            <div class="bg-meat h-full w-[570px] h-[412px]"/>
+            <div class="bg-meat w-[570px] h-[412px] mr-[30px] " ref="content2"/>
 
-            <div class="w-[570px]">
+            <div class="w-[570px] flex flex-col justify-between element-animation" ref="content" :class="contentCheck <= 450 ? 'element-show' : ''">
 
-                <h2 class="font-bold text-[54px] leading-[75.5px]">
+                <h2 class="font-bold text-[54px] leading-[75.5px] animate-pulse bg-gradient-to-r from-red-500 via-green-500 to-violet-blue bg-clip-text text-transparent">
 
                     Fresh Product Directly
                     To Your Door With Free
-                    Delivery
+                    <span class="border-b-[20px] border-red-300">Delivery</span>
 
                 </h2>
 
@@ -177,10 +238,52 @@ const templates = computed(()=> store.templateItems)
 
                 </div>
 
+                <div class="flex items-center mt-[20px] ">
+
+                    <div class="before:content-[url('@/assets/icons/homepage/agree_gray.png')] before:mr-0.5 before:text-red-500 mr-[40px]">
+
+                        Free Delivery For All Order
+
+                    </div>
+
+
+                    <div class="before:content-[url('@/assets/icons/homepage/agree_gray.png')] before:mr-0.5 before:text-red-500">
+
+                        Only Fresh Food
+
+                    </div>
+
+                </div>
+
+                <button class="border border-red-400 w-[110px] h-[50px] text-[16px] leading-[25.6px] rubick text-[#E21A43] hover:bg-black hover:font-bold hover:duration-500">
+
+                    Find Now
+
+                </button>
+
             </div>
 
         </div>
 
     </section>
 
+    <div v-if="bottom">Uhuy! Sampai bawah</div>
+
+    </div>
 </template>
+
+<style>
+.element-animation{
+    top: 0;
+    opacity: 0;
+    position: relative;
+}
+
+.element-animation.element-show{
+    position: relative;
+    top: -20px;
+    opacity: 1;
+    transition-duration: 1.4s;
+}
+
+</style>
