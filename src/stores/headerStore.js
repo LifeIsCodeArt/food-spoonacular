@@ -14,8 +14,8 @@ export const useHeaderStore = defineStore('headerStore', () => {
     },
     {
       id:2,
-      text: 'Recipies',
-      path: '/recipies'
+      text: 'Recipes',
+      path: '/recipes'
     },
     {
       id:3,

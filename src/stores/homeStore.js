@@ -1,26 +1,5 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import getRecipes from "../services/api/getRecipes.js";
-
-  export const useRecipesStore = defineStore('recipesStore', () => {
-
-    const recipes = ref([])
-
-    const getCurrentRecipes = async () => {
-      try {
-        const res = await getRecipes.getRecipes()
-        recipes.value = res.data
-        console.log(recipes.value)
-        console.log(recipes)
-      }
-      catch (err) {
-        console.log(err)
-      }
-    }
-
-    return {recipes, getCurrentRecipes}
-
-  })
 
   export const useTemplatesStore = defineStore('templatesStore', () => {
 

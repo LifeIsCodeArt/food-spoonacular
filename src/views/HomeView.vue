@@ -1,55 +1,41 @@
 <script setup>
 
-import {useTemplatesStore, useRecipesStore} from "@/stores/homeStore.js";
+import {useTemplatesStore} from "@/stores/homeStore.js";
 
 import AboutItem from "@/components/Homepage/aboutItem.vue";
 import Category from "@/components/Homepage/category.vue"
 
-import {computed, onMounted, onBeforeMount, ref, watch} from "vue";
+import {computed, onMounted, ref} from "vue";
 
 const templates = useTemplatesStore()
 
+
 const templatesArray = computed(()=> templates.templateItems)
 
-const recipes = computed(() => useRecipesStore.getCurrentRecipes)
+
+
+const findBox = ref()
+const workBox = ref()
+
+
+window.onscroll = () =>  {
+
+    const elementFindBox = findBox.value.getBoundingClientRect().top
+    const elementWorks = workBox.value.getBoundingClientRect().top
 
 
 
-const content2 = ref()
+    if(elementFindBox <= 450){
 
-/* window.onscroll = (el) =>  {
-
-    let posTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
-
-    console.log(content.value.getBoundingClientRect().top  ,' y=' + posTop);
-
-    if(content.value.getBoundingClientRect().top <= 250){
-
-        content.value.classList.add('element-show')
+        findBox.value.classList.add('element-show')
         console.log('class added')
 
     }
 
-    else {
+    else if(elementWorks <= 450){
 
-        console.log('class not added')
-
-    }
-
-}*/
-
-const content = ref()
-
-const contentCheck = content.value.getBoundingClientRect().top <= 450
-
- window.onscroll = () =>  {
-
-    const topValue = content.value.getBoundingClientRect().top
-
-    if(topValue.value <= 450){
-
-        topValue.value.classList.add('element-show')
-        console.log('class added')
+        workBox.value.classList.add('element-show')
+        console.log('class added2')
 
     }
 
@@ -62,12 +48,6 @@ const contentCheck = content.value.getBoundingClientRect().top <= 450
 }
 
 
-onMounted(()=> {
-
-    useRecipesStore().getCurrentRecipes()
-    console.log(recipes)
-
-})
 
 
 </script>
@@ -154,7 +134,7 @@ onMounted(()=> {
 
         </div>
 
-        <div class="mt-[45px] flex justify-around px-[150px]">
+        <div class="mt-[45px] flex justify-around px-[150px] element-animation-work" ref="workBox">
 
             <about-item v-for="item in templatesArray" :item="item" />
 
@@ -162,7 +142,7 @@ onMounted(()=> {
 
     </section>
 
-    <section class="mt-[115px] bg-[#FFFBF3] h-[712px] ">
+    <section class="mt-[115px] bg-[#FFFBF3] h-[712px]" ref="">
 
         <div class="bg-delivery bg-no-repeat h-full ml-[140px] mr-[180px] flex items-center justify-end">
 
@@ -196,13 +176,13 @@ onMounted(()=> {
 
     </section>
 
-    <section class="px-[135px] py-[70px] ">
+    <section class="px-[135px] py-[70px] element-animation" ref="findBox">
 
         <div class="flex  justify-center  h-[412px]">
 
-            <div class="bg-meat w-[570px] h-[412px] mr-[30px] " ref="content2"/>
+            <div class="bg-meat w-[570px] h-[412px] mr-[30px]"/>
 
-            <div class="w-[570px] flex flex-col justify-between element-animation" ref="content" :class="contentCheck <= 450 ? 'element-show' : ''">
+            <div class="w-[570px] flex flex-col justify-between " >
 
                 <h2 class="font-bold text-[54px] leading-[75.5px] animate-pulse bg-gradient-to-r from-red-500 via-green-500 to-violet-blue bg-clip-text text-transparent">
 
@@ -283,6 +263,20 @@ onMounted(()=> {
     position: relative;
     top: -20px;
     opacity: 1;
+    transition-duration: 1.4s;
+}
+
+.element-animation-work{
+    transform: translateX(-30%) translateY(40%);
+    visibility: hidden;
+    position: relative;
+}
+
+.element-animation-work.element-show{
+    position: relative;
+    transform: translateX(0) translateY(0%);
+    visibility: visible;
+    top: -20px;
     transition-duration: 1.4s;
 }
 

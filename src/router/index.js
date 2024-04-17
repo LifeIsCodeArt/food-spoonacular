@@ -8,9 +8,15 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/recipes',
+      name: 'Recipes',
+      component: () => import('../views/TheSearch.vue')
     }
 
   ]
 })
+
 
 export default router
